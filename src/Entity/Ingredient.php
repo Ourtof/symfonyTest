@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 class Ingredient
@@ -14,10 +15,15 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $Name = null;
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
+    private ?string $name = null;
 
     #[ORM\Column]
-    private ?float $Price = null;
+    #[Assert\NotBlank]
+    #[Assert\Positive]
+    #[Assert\LessThan(201)]
+    private ?float $price = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -31,24 +37,24 @@ class Ingredient
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getPrice(): ?float
     {
-        return $this->Price;
+        return $this->price;
     }
 
-    public function setPrice(float $Price): self
+    public function setPrice(float $price): self
     {
-        $this->Price = $Price;
+        $this->price = $price;
 
         return $this;
     }
