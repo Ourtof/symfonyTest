@@ -32,7 +32,7 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredients/nouveau', name: 'ingredient.add')]
-    public function add(Request $request, EntityManagerInterface $em): Response 
+    public function add(Request $request, IngredientRepository $ingredientRepository): Response 
     {
         $form = $this->createForm(IngredientType::class, new Ingredient);
 
@@ -40,8 +40,7 @@ class IngredientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
 
-            $em->persist($ingredient);
-            $em->flush();
+           $ingredientRepository->add($ingredient, true);
 
             $this->addFlash(
                 'success',
@@ -57,7 +56,7 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredients/modifier/{id}', name: 'ingredient.edit')]
-    public function edit($id, IngredientRepository $ingredientRepository, Request $request, EntityManagerInterface $em): Response
+    public function edit($id, IngredientRepository $ingredientRepository, Request $request): Response
     {
         $ingredient = $ingredientRepository->find($id);
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -66,8 +65,7 @@ class IngredientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
 
-            $em->persist($ingredient);
-            $em->flush();
+            $ingredientRepository->add($ingredient, true);
 
             $this->addFlash(
                 'success',
@@ -83,18 +81,17 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredients/suppression/{id}', name: 'ingredient.remove')]
-    public function remove($id, IngredientRepository $ingredientRepository, EntityManagerInterface $em): Response 
+    public function remove($id, IngredientRepository $ingredientRepository): Response 
     {
         $ingredient = $ingredientRepository->find($id);
 
-        $em->remove($ingredient);
-        $em->flush();
+        $ingredientRepository->remove($ingredient, true);
+
 
         $this->addFlash(
             'success',
             'votre ingrédient a été supprimé avec succès'
         );
-
 
         return $this->redirectToRoute('ingredient.index');
     }
