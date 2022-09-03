@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Ingredients - Sym-Recipe{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Mes ingrédients</h1>
+        <a href="#" class="btn btn-primary mt-4">Ajouter un ingrédient</a>
+
+        <div class="count mt-4"></div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col">Numéro</th>
+                    <th class="col">Nom</th>
+                    <th class="col">Prix</th>
+                    <th class="col">Date de création</th>
+                    <th class="col">Editions</th>
+                    <th class="col">Suppressions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                    
+                    <tr class="table-primary">
+                        {# id #}
+                        <th scope="row">{{ ingredient.id }}</th>
+                        {# name #}
+                        <td>{{ ingredient.name }}</td>
+                        {# price #}
+                        <td>{{ ingredient.price }}</td>
+                        {# createdAt #}
+                        <td>{{ ingredient.createdAt|date("d/m/Y h:s:i") }}</td>
+                        <td>
+                            <a href="#" class="btn btn-info">Modifier</a>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-warning">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
